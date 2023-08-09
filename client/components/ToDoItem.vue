@@ -32,13 +32,14 @@
                         </v-list-item> 
                 </v-list>
             </v-menu>
-            <edit-todo-modal :item="item" v-show="showModal" @updateTodo="emitUpdatedTodo" @toggleModal="toggleModal"/>          
+            <edit-todo-modal :item="item" v-if="showModal" @updateTodo="emitUpdatedTodo" @toggleModal="toggleModal"/>          
         </div>
 </template>
 
 <script>
 
 export default {
+    
   
   data() {
     return {

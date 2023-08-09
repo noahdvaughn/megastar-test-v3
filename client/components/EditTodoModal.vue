@@ -39,7 +39,7 @@ export default {
         return {
             className: 'sliding-up',
             editedTodo: {
-                title: String,
+            title: String,
             id: Number,
             userId: Number,
             completed: Boolean
@@ -58,7 +58,7 @@ export default {
     }
     },
     mounted(){
-        this.editedTodo = {...this.item} 
+        this.editedTodo = {...this.item}
     },
     props: {
         item: Object
