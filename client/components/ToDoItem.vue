@@ -46,7 +46,6 @@ export default {
         showModal: false
     }
   },
-   
     props: {
         data: Array,
         item: Object
