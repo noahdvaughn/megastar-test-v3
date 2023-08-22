@@ -66,12 +66,14 @@ export default {
             this.className = 'sliding-down'
             setTimeout(()=>{this.$emit('toggleModal', true), this.className = 'sliding-up'  }, 300 )
         },
+    
         handleSubmit(){
             this.$emit('createTodo', this.newTodo)
             this.newTodo = {   title: 'New Todo',
                     id: 0,            
                     userId: 1,
                     completed: false}
+            // this.createTodo()
             this.closeModal()
         }
     }    

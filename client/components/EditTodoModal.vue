@@ -6,6 +6,7 @@
             <v-icon class="edit-header-arrow" color="white" @click="closeModal">mdi-arrow-left</v-icon>
             <h1>Edit Todo</h1>
         </div>
+        
         <v-form class="edit-form">
 
             <v-text-field v-model="editedTodo.title" class="edit-field" solo  hide-details="false" theme="dark"></v-text-field>
@@ -58,7 +59,13 @@ export default {
     }
     },
     mounted(){
-        this.editedTodo = {...this.item}
+        this.editedTodo = {
+            id: item.id,
+            title: item.attributes.title,
+            userId: item.attributes.userId,
+            completed: item.attributes.completed
+        }
+        
     },
     props: {
         item: Object

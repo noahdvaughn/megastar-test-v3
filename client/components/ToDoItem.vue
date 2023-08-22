@@ -1,12 +1,12 @@
 <template >
     <div class="item-main">
         <div class="item-container-left">
-            <v-icon class="item-icon-circle-green" color= '#6add8a' v-if="item.completed === true" size="5rem">mdi-check-circle</v-icon> 
-            <v-icon class="item-icon-circle" v-if="item.completed === false" size="5rem" color="#3b3753" @click="$emit('markCompleted', item.id )">mdi-checkbox-blank-circle</v-icon>
+            <v-icon class="item-icon-circle-green" color= '#6add8a' v-if="item.attributes.completed === true" size="5rem">mdi-check-circle</v-icon> 
+            <v-icon class="item-icon-circle" v-if="item.attributes.completed === false" size="5rem" color="#3b3753" @click="$emit('markCompleted', item.id )">mdi-checkbox-blank-circle</v-icon>
     
             <div style="display: block; text-align: start;">
-                <h3 class="item-title">{{ item.title }}</h3>
-                <h4 class="item-user">User: {{ item.userId }}</h4>     
+                <h3 class="item-title">{{ item.attributes.title }}</h3>
+                <h4 class="item-user">User: {{ item.attributes.userId }}</h4>     
             </div>
     
             
@@ -54,6 +54,7 @@ export default {
         toggleModal(){
             this.showModal = !this.showModal
         },
+        
         emitUpdatedTodo(editedTodo){
         this.$emit('updateTodo', editedTodo)
         }

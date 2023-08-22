@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import axios from 'axios'
   export default{
     head() {
     return {
@@ -52,16 +53,17 @@
     }
   },
   mounted() {
-    this.GetToDos()
+    this.getToDos()
   },
   methods: {
-    async GetToDos(){
-      const res = await (await fetch('https://jsonplaceholder.typicode.com/users/1/todos')).json()
-      this.originalTodos = res
+
+    async getToDos(){
+      const res = await this.$axios.$get('/taskss')
+      this.originalTodos = res.data
       let openArray = []
       let closedArray = []
       for (let i=0; i<this.originalTodos.length; i++){
-        if (this.originalTodos[i].completed === true){
+        if (this.originalTodos[i].attributes.completed === true){
           closedArray.push(this.originalTodos[i])
         } else {
           openArray.push(this.originalTodos[i])
@@ -73,45 +75,74 @@
     onSetViewingOpen(bool){
       this.viewingOpen = bool
     },
-    markCompleted(id){
-      for (let i=0; i<this.openTodos.length; i++){
-        if (this.openTodos[i].id === id){
-          this.openTodos[i].completed = true
-          this.closedTodos.unshift(this.openTodos[i])
-          const removed = this.openTodos.splice(i, 1)
-        }
-      }
+    async markCompleted(id){
+      await this.$axios.$put(`/taskss/${id}`, {
+                data: {
+                  completed: true,
+                }
+              })
+      this.getToDos()
+           
+      // for (let i=0; i<this.openTodos.length; i++){
+      //   if (this.openTodos[i].id === id){
+      //     this.openTodos[i].attributes.completed = true
+      //     this.closedTodos.unshift(this.openTodos[i])
+      //     const removed = this.openTodos.splice(i, 1)
+      //   }
+      // }
     },
-    updateTodo(editedTodo){
-      for (let i=0; i<this.openTodos.length; i++){
-        if (this.openTodos[i].id === editedTodo.id){         
-          const removed = this.openTodos.splice(i, 1)
-          if(editedTodo.completed){
-            this.closedTodos.unshift(editedTodo)
-          } else{
-            this.openTodos.unshift(editedTodo)
-          }
-        }
-      }
-      for (let i=0; i<this.closedTodos.length; i++){
-        if (this.closedTodos[i].id === editedTodo.id){
-          const removed = this.closedTodos.splice(i, 1)
-          if(editedTodo.completed){
-            this.closedTodos.unshift(editedTodo)
-          } else{
-            this.openTodos.unshift(editedTodo)
-          }
-        }
-    }
+    async updateTodo(editedTodo){
+      await this.$axios.$put(`/taskss/${id}`, {
+                data: {
+                  completed: editedTodo.completed,
+                  title: editedTodo.title,
+                  userId: editedTodo.userId
+                }
+              })
+      this.getToDos()
+
+
+
+
+
+    //   for (let i=0; i<this.openTodos.length; i++){
+    //     if (this.openTodos[i].id === editedTodo.id){         
+    //       const removed = this.openTodos.splice(i, 1)
+    //       if(editedTodo.attributes.completed){
+    //         this.closedTodos.unshift(editedTodo)
+    //       } else{
+    //         this.openTodos.unshift(editedTodo)
+    //       }
+    //     }
+    //   }
+    //   for (let i=0; i<this.closedTodos.length; i++){
+    //     if (this.closedTodos[i].id === editedTodo.id){
+    //       const removed = this.closedTodos.splice(i, 1)
+    //       if(editedTodo.attributes.completed){
+    //         this.closedTodos.unshift(editedTodo)
+    //       } else{
+    //         this.openTodos.unshift(editedTodo)
+    //       }
+    //     }
+    // }
   },
-  createTodo(newTodo){
-    let newId = this.openTodos.length + this.closedTodos.length
-    newTodo.id = newId
-    if (newTodo.completed){
-      this.closedTodos.unshift({...newTodo})
-    } else {
-      this.openTodos.unshift({...newTodo})
-    }
+  async createTodo(newTodo){
+    await this.$axios.$post('/taskss', {
+                data: {
+                    title: newTodo.title,
+                    userId: newTodo.userId,
+                    completed: newTodo.completed,
+                }
+            })
+    this.getToDos()
+
+    // let newId = this.openTodos.length + this.closedTodos.length
+    // newTodo.id = newId
+    // if (newTodo.attribute.completed){
+    //   this.closedTodos.unshift({...newTodo})
+    // } else {
+    //   this.openTodos.unshift({...newTodo})
+    // }
   },
   toggleModal(){
     console.log(this.searchQuery)
@@ -121,8 +152,8 @@
     let filteredClosedArray = []
     let filteredOpenArray = []
     for (let i = 0; i < this.originalTodos.length; i++){
-      if (this.originalTodos[i].title.includes(this.searchQuery)){
-        if(this.originalTodos[i].completed){
+      if (this.originalTodos[i].attribute.title.includes(this.searchQuery)){
+        if(this.originalTodos[i].attribute.completed){
           filteredClosedArray.push(this.originalTodos[i])       
         }else{
           filteredOpenArray.push(this.originalTodos[i])
